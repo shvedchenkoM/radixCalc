@@ -18,5 +18,5 @@ def test_calc():
     def input_func():
         return next(input_gen_inv)
 
-    assert calc_mode(print_func=prn_msg, input_func=input_func) == 1000
+    assert calc_mode(print_func=prn_msg, input_func=input_func) == 1009
             
