@@ -1,0 +1,32 @@
+name: Run tests
+on:
+  # тригерит автматический запуск экшонзов по изменению внесенных в етку main и во все пул реквестов к ветке main
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  # автоматически запускает с 8ми утра до 6ти вечера на 10й минуте часа(08:10, 09:10, 10:10, 11.10...)
+  schedule:
+    - cron: '0-5 9-11 * * *'
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9]
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Set Up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install pytest
+        run: |
+          python -m pip install --upgrade pip
+          pip install -U -r requirements.txt
+      - name: Run tests
+        run: PYTHONPATH=${PWD} pytest tests/test* -v
